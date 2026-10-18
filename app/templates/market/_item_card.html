@@ -1,0 +1,21 @@
+{# Shared listing card. Context: item = public_item(document); item_heading defaults to h3. #}
+<article class="item-card">
+  <a class="item-card-link" href="{{ url_for('market.item_detail', item_id=item.id) }}">
+    {% if item.image_url %}
+      <img class="item-card-image" src="{{ item.image_url }}" alt="" loading="lazy">
+    {% else %}
+      <div class="item-card-image item-card-no-photo" aria-hidden="true">No photo</div>
+    {% endif %}
+    <div class="item-card-body">
+      <p class="item-card-category">{{ item.category }} &middot; {{ item.condition }}</p>
+      {% if item_heading|default('h3') == 'h2' %}
+        <h2 class="item-card-title">{{ item.title }}</h2>
+      {% else %}
+        <h3 class="item-card-title">{{ item.title }}</h3>
+      {% endif %}
+      <p class="item-card-price">${{ '%.2f'|format(item.price) }}</p>
+      <p class="item-card-description">{{ item.description }}</p>
+      <span class="item-card-details">View item <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </a>
+</article>

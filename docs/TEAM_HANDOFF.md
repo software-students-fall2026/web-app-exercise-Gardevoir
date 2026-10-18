@@ -43,11 +43,13 @@ Use a status change to `deleted` for a seller's delete action, then exclude dele
 | Zihan | `app/search.py` | `GET /search`; query fields `q`, `category`, `min_price`, `max_price`; reuse Ali's card |
 | Yuyang | `app/auth.py`, `app/db.py`, shared shell | Maintain account, database, environment, and shared navigation contracts |
 
-Search now renders results from MongoDB. The other feature routes currently return temporary pages; feature owners should replace those responses with their templates and queries. Keep the URL paths and endpoint names stable so the navigation and other modules continue to work. Public routes are browse, detail, and search. Publishing and managing require login.
+Browse, detail, and search now render listings from MongoDB. Publishing and management routes currently return temporary pages; their feature owners should replace those responses with their templates and queries. Keep the URL paths and endpoint names stable so the navigation and other modules continue to work. Public routes are browse, detail, and search. Publishing and managing require login.
+
+Browsing shows active items, newest first, with an empty state when no active listings exist. Details accept active or sold listings; sold details display a notice and omit seller contact. Malformed IDs, unknown items, deleted items, and unsupported statuses return the same helpful HTTP 404 page. Database read failures return an availability message (HTTP 503), separate from missing items and an empty catalog. Detail descriptions and contact information are displayed as escaped plain text.
 
 For the search page, apply all provided filters together and preserve their values in the result form. Use only active items and show an empty state when nothing matches. The URL parameters are exactly `q`, `category`, `min_price`, and `max_price`.
 
-Search keeps the `search.results` endpoint. Keywords match literal, case-insensitive text in the title or description; price bounds are inclusive. Invalid filters return a form with field errors (HTTP 400), and database failures show an availability message (HTTP 503). Until Ali's shared card is available, results use the isolated `search/_item_card.html` partial, with `item` produced by `public_item()`. Replace that include with the agreed shared card during integration. Search styles live in `app/static/search.css`; the shared base provides an optional `extra_head` block for page styles.
+Search keeps the `search.results` endpoint. Keywords match literal, case-insensitive text in the title or description; price bounds are inclusive. Invalid filters return a form with field errors (HTTP 400), and database failures show an availability message (HTTP 503). Browse and search use Ali's shared `market/_item_card.html` partial, with `item` produced by `public_item()`, and load `app/static/item-card.css`. Browse and detail styles live in `app/static/market.css`; search form styles live in `app/static/search.css`. The shared base provides an optional `extra_head` block for page styles.
 
 ## Suggested integration check
 

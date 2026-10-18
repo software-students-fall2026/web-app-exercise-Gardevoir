@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Browse items | Gardevoir{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='item-card.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='market.css') }}">
+{% endblock %}
+{% block content %}
+  <section class="market-page" aria-labelledby="browse-title">
+    <div class="market-heading">
+      <div>
+        <h1 id="browse-title">Browse campus finds</h1>
+        <p class="market-intro">Give something useful a second home.</p>
+      </div>
+      <a class="market-search-link" href="{{ url_for('search.results') }}">Search &amp; filter items <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    {% if service_error %}
+      <div class="market-message" role="alert">
+        <h2>Marketplace temporarily unavailable</h2>
+        <p>{{ service_error }}</p>
+        <a href="{{ url_for('market.items') }}">Try again</a>
+      </div>
+    {% elif items %}
+      <p class="market-list-count">{{ items|length }} available {{ 'item' if items|length == 1 else 'items' }} &middot; Newest first</p>
+      <ul class="market-grid">
+        {% for item in items %}
+          <li>{% with item_heading='h2' %}{% include "market/_item_card.html" %}{% endwith %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="market-message">
+        <h2>No items are available right now</h2>
+        <p>Check back soon for new campus listings, or visit search to explore the filters.</p>
+        <a href="{{ url_for('search.results') }}">Go to search</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock %}

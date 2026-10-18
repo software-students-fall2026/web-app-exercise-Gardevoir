@@ -23,8 +23,9 @@ def app():
 
 def test_public_pages_and_owner_routes(app):
     browser = app.test_client()
-    for path in ("/items", "/items/example", "/search?q=lamp"):
+    for path in ("/items", "/search?q=lamp"):
         assert browser.get(path).status_code == 200
+    assert browser.get("/items/example").status_code == 404
     for path in ("/items/new", "/my-items", "/items/example/edit"):
         response = browser.get(path)
         assert response.status_code == 302

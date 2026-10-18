@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }} | Gardevoir{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='market.css') }}">
+{% endblock %}
+{% block content %}
+  <section class="market-page market-message market-error" aria-labelledby="message-title">
+    <h1 id="message-title">{{ heading }}</h1>
+    <p>{{ message }}</p>
+    <div class="market-message-links">
+      {% if retry_url %}<a href="{{ retry_url }}">Try again</a>{% endif %}
+      <a href="{{ url_for('market.items') }}">Browse available items</a>
+      <a href="{{ url_for('search.results') }}">Search items</a>
+    </div>
+  </section>
+{% endblock %}

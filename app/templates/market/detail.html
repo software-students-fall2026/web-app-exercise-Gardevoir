@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title }} | Gardevoir{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='item-card.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='market.css') }}">
+{% endblock %}
+{% block content %}
+  <section class="market-page market-detail" aria-labelledby="item-title">
+    <nav class="market-back-links" aria-label="Listing navigation">
+      <a href="{{ url_for('market.items') }}"><span aria-hidden="true">&larr;</span> Back to browse</a>
+      <a href="{{ url_for('search.results') }}">Search items</a>
+    </nav>
+    {% if item.status == 'sold' %}
+      <div class="market-sold-notice">
+        <strong>Sold</strong>
+        <p>This item has been sold.</p>
+      </div>
+    {% endif %}
+    <article class="market-detail-card">
+      <div class="market-detail-photo">
+        {% if item.image_url %}
+          <img src="{{ item.image_url }}" alt="{{ item.title }}" class="market-item-image">
+        {% else %}
+          <div class="market-item-image market-no-photo">No photo</div>
+        {% endif %}
+      </div>
+      <div class="market-detail-body">
+        <p class="market-item-category">{{ item.category }}</p>
+        <h1 id="item-title">{{ item.title }}</h1>
+        <p class="market-item-price">${{ '%.2f'|format(item.price) }}</p>
+        <dl class="market-item-facts">
+          <div><dt>Condition</dt><dd>{{ item.condition }}</dd></div>
+          <div><dt>Status</dt><dd>{{ 'Sold' if item.status == 'sold' else 'Available' }}</dd></div>
+          {% if item.created_at %}
+            <div><dt>Posted</dt><dd><time datetime="{{ item.created_at.strftime('%Y-%m-%d') }}">{{ item.created_at.strftime('%b %d, %Y') }}</time></dd></div>
+          {% endif %}
+        </dl>
+        <section class="market-detail-section" aria-labelledby="description-title">
+          <h2 id="description-title">Description</h2>
+          <p class="market-multiline">{{ item.description }}</p>
+        </section>
+        {% if item.status != 'sold' %}
+          <section class="market-detail-section market-contact" aria-labelledby="contact-title">
+            <h2 id="contact-title">Contact the seller</h2>
+            <p class="market-multiline">{{ item.contact_info or 'Contact information is not available.' }}</p>
+          </section>
+        {% endif %}
+      </div>
+    </article>
+  </section>
+{% endblock %}
